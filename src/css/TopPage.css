@@ -1,0 +1,13 @@
+.item-list {
+  margin-left: 40px;
+}
+
+.learn-react {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.learn-react .item-list {
+  margin-bottom: 10px;
+}
