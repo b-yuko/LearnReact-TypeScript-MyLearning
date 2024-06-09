@@ -1,45 +1,31 @@
 import "../css/DescribingTheUiPage.css";
 
-// コンポーネントに props を渡す
+// 条件付きレンダー
 // チャレンジ問題
-// 3. children に JSX を渡す
+// 1. ? : を使って未梱包アイコンを表示
 
-import { ReactNode } from "react";
-
-interface CardProps {
-  children: ReactNode;
-  title: string;
+interface ItemProps {
+  name: string;
+  isPacked: boolean;
 }
 
-function Card({ children, title }: CardProps) {
+function Item({ name, isPacked }: ItemProps) {
   return (
-    <div className="card">
-      <div className="card-content">
-        <h1>{title}</h1>
-        {children}
-      </div>
-    </div>
+    <li className="item">
+      {name} {isPacked ? "✔" : "❌"}
+    </li>
   );
 }
 
-export default function Profile() {
+export default function PackingList() {
   return (
-    <div>
-      <Card title="Photo">
-        <img
-          className="avatar"
-          src="https://i.imgur.com/OKS67lhm.jpg"
-          alt="Aklilu Lemma"
-          width={70}
-          height={70}
-        />
-      </Card>
-      <Card title="About">
-        <p>
-          Aklilu Lemma was a distinguished Ethiopian scientist who discovered a
-          natural treatment to schistosomiasis.
-        </p>
-      </Card>
-    </div>
+    <section>
+      <h1>Sally Ride's Packing List</h1>
+      <ul>
+        <Item isPacked={true} name="Space suit" />
+        <Item isPacked={true} name="Helmet with a golden leaf" />
+        <Item isPacked={false} name="Photo of Tam" />
+      </ul>
+    </section>
   );
 }
