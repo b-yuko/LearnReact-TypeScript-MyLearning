@@ -2,103 +2,52 @@ import "../css/DescribingTheUiPage.css";
 
 // リストのレンダー
 // チャレンジ問題
-// 1. リストを 2 つに分割
+// 2. 同一コンポーネント内のネストしたリスト
 
-interface Person {
-  id: number;
+interface Recipe {
+  id: string;
   name: string;
-  profession: string;
-  accomplishment: string;
-  imageId: string;
+  ingredients: string[];
 }
 
-const people: Person[] = [
+const recipes: Recipe[] = [
   {
-    id: 0,
-    name: "Creola Katherine Johnson",
-    profession: "mathematician",
-    accomplishment: "spaceflight calculations",
-    imageId: "MK3eW3A",
+    id: "greek-salad",
+    name: "Greek Salad",
+    ingredients: ["tomatoes", "cucumber", "onion", "olives", "feta"],
   },
   {
-    id: 1,
-    name: "Mario José Molina-Pasquel Henríquez",
-    profession: "chemist",
-    accomplishment: "discovery of Arctic ozone hole",
-    imageId: "mynHUSa",
+    id: "hawaiian-pizza",
+    name: "Hawaiian Pizza",
+    ingredients: [
+      "pizza crust",
+      "pizza sauce",
+      "mozzarella",
+      "ham",
+      "pineapple",
+    ],
   },
   {
-    id: 2,
-    name: "Mohammad Abdus Salam",
-    profession: "physicist",
-    accomplishment: "electromagnetism theory",
-    imageId: "bE7W1ji",
-  },
-  {
-    id: 3,
-    name: "Percy Lavon Julian",
-    profession: "chemist",
-    accomplishment:
-      "pioneering cortisone drugs, steroids and birth control pills",
-    imageId: "IOjWm71",
-  },
-  {
-    id: 4,
-    name: "Subrahmanyan Chandrasekhar",
-    profession: "astrophysicist",
-    accomplishment: "white dwarf star mass calculations",
-    imageId: "lrWQx8l",
+    id: "hummus",
+    name: "Hummus",
+    ingredients: ["chickpeas", "olive oil", "garlic cloves", "lemon", "tahini"],
   },
 ];
 
-function getImageUrl(person: Person) {
-  return "https://i.imgur.com/" + person.imageId + "s.jpg";
-}
-
-interface ListSectionProps {
-  title: string;
-  people: Person[];
-}
-
-function ListSection({ title, people }: ListSectionProps) {
+export default function RecipeList() {
   return (
-    <>
-      <h1>{title}</h1>
-      <ul>
-        {people.map((person) => (
-          <li key={person.id}>
-            <img src={getImageUrl(person)} alt={person.name} />
-            <p>
-              <b>{person.name}:</b>
-              {" " + person.profession + " "}
-              known for {person.accomplishment}
-            </p>
-          </li>
-        ))}
-      </ul>
-    </>
-  );
-}
-
-export default function List() {
-  const chemists: Person[] = [];
-  const everyoneElse: Person[] = [];
-  for (const person of people) {
-    if (person.profession === "chemist") {
-      chemists.push(person);
-    } else {
-      everyoneElse.push(person);
-    }
-  }
-
-  return (
-    <>
-      <article>
-        <ListSection title="Chemists" people={chemists} />
-      </article>
-      <article>
-        <ListSection title="Everyone Else" people={everyoneElse} />
-      </article>
-    </>
+    <div>
+      <h1>Recipes</h1>
+      {recipes.map((recipe) => (
+        <div key={recipe.id}>
+          <h1>{recipe.name}</h1>
+          <ul>
+            {recipe.ingredients.map((ingredient) => (
+              <li key={ingredient}>{ingredient}</li>
+            ))}
+          </ul>
+        </div>
+      ))}
+    </div>
   );
 }
