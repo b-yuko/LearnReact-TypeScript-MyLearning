@@ -2,7 +2,7 @@ import "../css/DescribingTheUiPage.css";
 
 // リストのレンダー
 // チャレンジ問題
-// 2. 同一コンポーネント内のネストしたリスト
+// 3. リスト要素のコンポーネントを抽出
 
 interface Recipe {
   id: string;
@@ -34,19 +34,25 @@ const recipes: Recipe[] = [
   },
 ];
 
+function Recipe({ name, ingredients }: Recipe) {
+  return (
+    <div>
+      <h1>{name}</h1>
+      <ul>
+        {ingredients.map((ingredient) => (
+          <li key={ingredient}>{ingredient}</li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
 export default function RecipeList() {
   return (
     <div>
       <h1>Recipes</h1>
       {recipes.map((recipe) => (
-        <div key={recipe.id}>
-          <h1>{recipe.name}</h1>
-          <ul>
-            {recipe.ingredients.map((ingredient) => (
-              <li key={ingredient}>{ingredient}</li>
-            ))}
-          </ul>
-        </div>
+        <Recipe key={recipe.id} {...recipe} />
       ))}
     </div>
   );
