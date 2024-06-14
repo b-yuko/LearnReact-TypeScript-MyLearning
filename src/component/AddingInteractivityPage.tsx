@@ -1,45 +1,35 @@
-import "../css/AddingInteractivityPage.css";
-import { ChangeEvent, useState } from "react";
-
 /*
   state：コンポーネントのメモリ
   チャレンジ問題
-  2. 動かないフォームの修正
+  3. クラッシュの修正
 */
 
-export default function Form() {
-  const [firstName, setFirstName] = useState<string>("");
-  const [lastName, setLastName] = useState<string>("");
+import "../css/AddingInteractivityPage.css";
+import { useState } from "react";
 
-  function handleFirstNameChange(e: ChangeEvent<HTMLInputElement>) {
-    setFirstName(e.target.value);
+export default function FeedbackForm() {
+  const [isSent, setIsSent] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>("");
+
+  if (isSent) {
+    return <h1>Thank you!</h1>;
+  } else {
+    return (
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          alert(`Sending: "${message}"`);
+          setIsSent(true);
+        }}
+      >
+        <textarea
+          placeholder="Message"
+          value={message}
+          onChange={(e) => setMessage(e.target.value)}
+        />
+        <br />
+        <button type="submit">Send</button>
+      </form>
+    );
   }
-
-  function handleLastNameChange(e: ChangeEvent<HTMLInputElement>) {
-    setLastName(e.target.value);
-  }
-
-  function handleReset() {
-    setFirstName("");
-    setLastName("");
-  }
-
-  return (
-    <form onSubmit={(e) => e.preventDefault()}>
-      <input
-        placeholder="First name"
-        value={firstName}
-        onChange={handleFirstNameChange}
-      />
-      <input
-        placeholder="Last name"
-        value={lastName}
-        onChange={handleLastNameChange}
-      />
-      <h1>
-        Hi, {firstName} {lastName}
-      </h1>
-      <button onClick={handleReset}>Reset</button>
-    </form>
-  );
 }
