@@ -2,81 +2,65 @@ import "../css/DescribingTheUiPage.css";
 
 // コンポーネントに props を渡す
 // チャレンジ問題
-// 1. コンポーネント抽出
+// 2. props に基づく画像サイズ変更
 
-function getImageUrl(imageId: string, size = "s") {
-  return "https://i.imgur.com/" + imageId + size + ".jpg";
-}
-
-interface PersonProps {
+interface Person {
   name: string;
   imageId: string;
-  profession: string;
-  awards: string[];
-  discovered: string;
-  imageSize?: number;
 }
 
-function Profile({
-  name,
-  imageId,
-  profession,
-  awards,
-  discovered,
-  imageSize = 70,
-}: PersonProps) {
+function getImageUrl(person: Person, size: string) {
+  return "https://i.imgur.com/" + person.imageId + size + ".jpg";
+}
+
+const ratio = window.devicePixelRatio;
+
+interface AvatarProps {
+  person: Person;
+  size: number;
+}
+
+function Avatar({ person, size }: AvatarProps) {
+  let thumbnailSize = "s";
+  if (size * ratio > 90) {
+    thumbnailSize = "b";
+  }
+
   return (
-    <section className="profile">
-      <h2>{name}</h2>
-      <img
-        className="avatar"
-        src={getImageUrl(imageId)}
-        alt={name}
-        width={imageSize}
-        height={imageSize}
-      />
-      <ul>
-        <li>
-          <b>Profession: </b>
-          {profession}
-        </li>
-        <li>
-          <b>Awards: {awards.length} </b>({awards.join(", ")})
-        </li>
-        <li>
-          <b>Discovered: </b>
-          {discovered}
-        </li>
-      </ul>
-    </section>
+    <img
+      className="avatar"
+      src={getImageUrl(person, thumbnailSize)}
+      alt={person.name}
+      width={size}
+      height={size}
+    />
   );
 }
 
-export default function Gallery() {
+export default function Profile() {
   return (
-    <div>
-      <h1>Notable Scientists</h1>
-
-      <Profile
-        name="Maria Skłodowska-Curie"
-        imageId="szV5sdG"
-        profession="physicist and chemist"
-        awards={[
-          "Nobel Prize in Physics",
-          "Nobel Prize in Chemistry",
-          "Davy Medal",
-          "Matteucci Medal",
-        ]}
-        discovered="polonium (chemical element)"
+    <>
+      <Avatar
+        size={40}
+        person={{
+          name: "Gregorio Y. Zara",
+          imageId: "7vQD0fP",
+        }}
       />
-
-      <Profile
-        name="Katsuko Saruhashi"
-        imageId="YfeOqp2"
-        profession="geochemist"
-        awards={["Miyake Prize for geochemistry", "Tanaka Prize"]}
-        discovered="a method for measuring carbon dioxide in seawater"
+      <Avatar
+        size={70}
+        person={{
+          name: "Gregorio Y. Zara",
+          imageId: "7vQD0fP",
+        }}
       />
-    </div>
+      <Avatar
+        size={120}
+        person={{
+          name: "Gregorio Y. Zara",
+          imageId: "7vQD0fP",
+        }}
+      />
+    </>
   );
 }
