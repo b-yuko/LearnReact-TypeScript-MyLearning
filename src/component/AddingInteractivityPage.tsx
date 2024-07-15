@@ -1,16 +1,33 @@
 /*
-  state：コンポーネントのメモリ
+  一連の state の更新をキューに入れる
   チャレンジ問題
-  4. 不要な state を削除
+  1. リクエストカウンタの修正
 */
 
-import "../css/AddingInteractivityPage.css";
+import { useState } from "react";
 
-export default function FeedbackForm() {
-  function handleClick() {
-    const name = prompt("What is your name?");
-    alert(`Hello, ${name}!`);
+export default function RequestTracker() {
+  const [pending, setPending] = useState(0);
+  const [completed, setCompleted] = useState(0);
+
+  async function handleClick() {
+    setPending((pending) => pending + 1);
+    await delay(3000);
+    setPending((pending) => pending - 1);
+    setCompleted((completed) => completed + 1);
   }
 
-  return <button onClick={handleClick}>Greet</button>;
+  return (
+    <>
+      <h3>Pending: {pending}</h3>
+      <h3>Completed: {completed}</h3>
+      <button onClick={handleClick}>Buy</button>
+    </>
+  );
+}
+
+function delay(ms: number) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
 }
