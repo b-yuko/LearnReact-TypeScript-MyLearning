@@ -2,71 +2,62 @@ import "../css/DescribingTheUiPage.css";
 
 // コンポーネントを純粋に保つ
 // チャレンジ問題
-// 2. 壊れたプロフィールを修正する
+// 3. 壊れたストーリートレイを修正
 
-import { ReactNode, useState } from "react";
+import { useState, useEffect } from "react";
 
-function getImageUrl(person: Person, size = "s") {
-  return "https://i.imgur.com/" + person.imageId + size + ".jpg";
+interface InitialStory {
+  id: number;
+  label: string;
 }
 
-function Panel({ children }: { children: ReactNode }) {
-  const [open, setOpen] = useState(true);
-  return (
-    <section className="panel">
-      <button onClick={() => setOpen(!open)}>
-        {open ? "Collapse" : "Expand"}
-      </button>
-      {open && children}
-    </section>
-  );
-}
-
-function Header({ name }: { name: string }) {
-  return <h1>{name}</h1>;
-}
-
-function Avatar(person: Person) {
-  return (
-    <img
-      className="avatar"
-      src={getImageUrl(person)}
-      alt={person.name}
-      width={50}
-      height={50}
-    />
-  );
-}
-
-interface Person {
-  imageId: string;
-  name: string;
-}
-
-function Profile({ person }: { person: Person }) {
-  return (
-    <Panel>
-      <Header {...person} />
-      <Avatar {...person} />
-    </Panel>
-  );
-}
+const initialStories: InitialStory[] = [
+  { id: 0, label: "Ankit's Story" },
+  { id: 1, label: "Taylor's Story" },
+];
 
 export default function App() {
+  const [stories] = useState<InitialStory[]>([...initialStories]);
+  const time = useTime();
+
+  // HACK: Prevent the memory from growing forever while you read docs.
+  // We're breaking our own rules here.
+  if (stories.length > 100) {
+    stories.length = 100;
+  }
+
   return (
-    <>
-      <Profile
-        person={{
-          imageId: "lrWQx8l",
-          name: "Subrahmanyan Chandrasekhar",
-        }}
-      />
-      <Profile
-        person={{
-          imageId: "MK3eW3A",
-          name: "Creola Katherine Johnson",
-        }}
-      />
-    </>
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        textAlign: "center",
+      }}
+    >
+      <h2>It is {time.toLocaleTimeString()} now.</h2>
+      <StoryTray stories={stories} />
+    </div>
+  );
+}
+
+function useTime() {
+  const [time, setTime] = useState(() => new Date());
+  useEffect(() => {
+    const id = setInterval(() => {
+      setTime(new Date());
+    }, 1000);
+    return () => clearInterval(id);
+  }, []);
+  return time;
+}
+
+function StoryTray({ stories }: { stories: InitialStory[] }) {
+  return (
+    <ul>
+      {stories.map((story) => (
+        <li key={story.id}>{story.label}</li>
+      ))}
+      <li>Create Story</li>
+    </ul>
   );
 }
