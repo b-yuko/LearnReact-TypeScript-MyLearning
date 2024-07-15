@@ -2,37 +2,71 @@ import "../css/DescribingTheUiPage.css";
 
 // コンポーネントを純粋に保つ
 // チャレンジ問題
-// 1. 壊れた時計を修理
+// 2. 壊れたプロフィールを修正する
 
-import { useState, useEffect } from "react";
+import { ReactNode, useState } from "react";
 
-function useTime() {
-  const [time, setTime] = useState<Date>(() => new Date());
-  useEffect(() => {
-    const id = setInterval(() => {
-      setTime(new Date());
-    }, 1000);
-    return () => clearInterval(id);
-  }, []);
-  return time;
+function getImageUrl(person: Person, size = "s") {
+  return "https://i.imgur.com/" + person.imageId + size + ".jpg";
+}
+
+function Panel({ children }: { children: ReactNode }) {
+  const [open, setOpen] = useState(true);
+  return (
+    <section className="panel">
+      <button onClick={() => setOpen(!open)}>
+        {open ? "Collapse" : "Expand"}
+      </button>
+      {open && children}
+    </section>
+  );
+}
+
+function Header({ name }: { name: string }) {
+  return <h1>{name}</h1>;
+}
+
+function Avatar(person: Person) {
+  return (
+    <img
+      className="avatar"
+      src={getImageUrl(person)}
+      alt={person.name}
+      width={50}
+      height={50}
+    />
+  );
+}
+
+interface Person {
+  imageId: string;
+  name: string;
+}
+
+function Profile({ person }: { person: Person }) {
+  return (
+    <Panel>
+      <Header {...person} />
+      <Avatar {...person} />
+    </Panel>
+  );
 }
 
 export default function App() {
-  const time = useTime();
-  return <Clock time={time} />;
-}
-
-function Clock({ time }: { time: Date }) {
-  const hours = time.getHours();
-  let className;
-  if (hours >= 0 && hours <= 6) {
-    className = "night";
-  } else {
-    className = "day";
-  }
   return (
-    <h1 id="time" className={className}>
-      {time.toLocaleTimeString()}
-    </h1>
+    <>
+      <Profile
+        person={{
+          imageId: "lrWQx8l",
+          name: "Subrahmanyan Chandrasekhar",
+        }}
+      />
+      <Profile
+        person={{
+          imageId: "MK3eW3A",
+          name: "Creola Katherine Johnson",
+        }}
+      />
+    </>
   );
 }
