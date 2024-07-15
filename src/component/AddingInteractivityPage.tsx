@@ -1,35 +1,16 @@
 /*
   state：コンポーネントのメモリ
   チャレンジ問題
-  3. クラッシュの修正
+  4. 不要な state を削除
 */
 
 import "../css/AddingInteractivityPage.css";
-import { useState } from "react";
 
 export default function FeedbackForm() {
-  const [isSent, setIsSent] = useState<boolean>(false);
-  const [message, setMessage] = useState<string>("");
-
-  if (isSent) {
-    return <h1>Thank you!</h1>;
-  } else {
-    return (
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          alert(`Sending: "${message}"`);
-          setIsSent(true);
-        }}
-      >
-        <textarea
-          placeholder="Message"
-          value={message}
-          onChange={(e) => setMessage(e.target.value)}
-        />
-        <br />
-        <button type="submit">Send</button>
-      </form>
-    );
+  function handleClick() {
+    const name = prompt("What is your name?");
+    alert(`Hello, ${name}!`);
   }
+
+  return <button onClick={handleClick}>Greet</button>;
 }
